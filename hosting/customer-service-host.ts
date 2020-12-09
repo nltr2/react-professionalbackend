@@ -93,7 +93,7 @@ class CustomerServiceHost implements IServiceHost {
                 throw new Error(INVALID_SECRET_KEY);
             }
 
-            this.application.use(<any>morgan('dev'));
+            this.application.use(morgan('dev'));
             this.application.use(this.applyCors);
             this.application.use(this.handleError);
             this.application.use(bodyParser.json());
