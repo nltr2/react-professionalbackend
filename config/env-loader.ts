@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 const loadEnvironment = (environment: string) => {
     dotenv.config({
-        path: path.resolve(`${process.cwd()}\\environments\\${environment}.env`)
+        path: path.resolve(`${process.cwd()}/environments/${environment}.env`)
     });
 };
 

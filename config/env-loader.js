@@ -8,7 +8,7 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const loadEnvironment = (environment) => {
     dotenv_1.default.config({
-        path: path_1.default.resolve(`${process.cwd()}\\environments\\${environment}.env`)
+        path: path_1.default.resolve(`${process.cwd()}/environments/${environment}.env`)
     });
 };
 exports.loadEnvironment = loadEnvironment;
