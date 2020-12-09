@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomerRouting = void 0;
-const services_1 = require("../business/services");
+const customers_1 = require("../business/services/customers");
 const express_1 = __importDefault(require("express"));
 const constants_1 = require("../constants");
 const models_1 = require("../models");
@@ -22,9 +22,11 @@ const INVALID_ARGUMENTS = "Invalid Customer Argument(s) Specified!";
 const MIN_SEARCH_STR_LEN = 3;
 const UNKNOWN_ERROR = "Unknown Error Occurred, Try again later!";
 const MIN_RECORDS = 1;
+const NEW_CUSTOMER_RECORD = "NewCustomerRecord";
 class CustomerRouting {
-    constructor(customerService) {
-        this.customerService = customerService || new services_1.CustomerService();
+    constructor(customerService, notificationService) {
+        this.customerService = customerService || new customers_1.CustomerService();
+        this.notificationService = notificationService;
         this.router = express_1.default.Router();
         this.initializeRouting();
     }
@@ -115,6 +117,7 @@ class CustomerRouting {
             }
         }));
         this.router.post("/", (request, response) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const body = request.body;
             const customerRecord = new models_1.Customer(body.customerId, body.customerName, body.add, body.email, body.phoneNumber, body.customerType, body.creditLimit, body.activeStatus, body.remarks);
             const validation = customerRecord !== null &&
@@ -131,6 +134,9 @@ class CustomerRouting {
             try {
                 const status = yield this.customerService.addNewCustomer(customerRecord);
                 if (status) {
+                    if (this.notificationService !== null) {
+                        (_a = this.notificationService) === null || _a === void 0 ? void 0 : _a.notify(NEW_CUSTOMER_RECORD, customerRecord);
+                    }
                     response
                         .status(constants_1.HttpStatusCodes.OK)
                         .send(status);

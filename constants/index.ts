@@ -1,4 +1,4 @@
-import { HttpStatusCodes } from "./http-status-codes";
+import { HttpStatusCodes } from "./http-status";
 
 export {
     HttpStatusCodes

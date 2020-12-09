@@ -1,21 +1,25 @@
-import { CustomerService, ICustomerService } from '../business/services';
+import { CustomerService, ICustomerService } from '../business/services/customers';
 import express from 'express';
-import { ICustomerRouting } from './icustomer-routing';
+import { IRouting } from './icustomer-routing';
 import { HttpStatusCodes } from '../constants';
 import { Customer } from '../models';
+import { INotificationService } from '../business/services';
 
 const NO_RECORDS_FOUND = "No Customer Record(s) Found!";
 const INVALID_ARGUMENTS = "Invalid Customer Argument(s) Specified!";
 const MIN_SEARCH_STR_LEN = 3;
 const UNKNOWN_ERROR = "Unknown Error Occurred, Try again later!";
 const MIN_RECORDS = 1;
+const NEW_CUSTOMER_RECORD = "NewCustomerRecord";
 
-class CustomerRouting implements ICustomerRouting {
+class CustomerRouting implements IRouting {
     private router: express.Router;
     private customerService: ICustomerService;
+    private notificationService?: INotificationService;
 
-    constructor(customerService?: ICustomerService) {
+    constructor(customerService?: ICustomerService, notificationService?: INotificationService) {
         this.customerService = customerService || new CustomerService();
+        this.notificationService = notificationService;
         this.router = express.Router();
 
         this.initializeRouting();
@@ -140,6 +144,10 @@ class CustomerRouting implements ICustomerRouting {
                 const status = await this.customerService.addNewCustomer(customerRecord);
 
                 if (status) {
+                    if (this.notificationService !== null) {
+                        this.notificationService?.notify(NEW_CUSTOMER_RECORD, customerRecord);
+                    }
+
                     response
                         .status(HttpStatusCodes.OK)
                         .send(status);

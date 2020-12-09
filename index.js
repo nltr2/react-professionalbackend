@@ -1,45 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CertificateDetails = exports.Customer = exports.CustomerSchema = exports.ObjectFormatter = exports.RandomGenerator = exports.AuthenticationRouting = exports.CustomerRouting = exports.CustomerServiceHost = exports.CustomersContext = exports.Configuration = exports.SocketNotificationService = exports.CustomerService = exports.LogManager = void 0;
 const common_1 = require("./common");
-const models_1 = require("./models");
+Object.defineProperty(exports, "LogManager", { enumerable: true, get: function () { return common_1.LogManager; } });
+const services_1 = require("./business/services");
+Object.defineProperty(exports, "CustomerService", { enumerable: true, get: function () { return services_1.CustomerService; } });
+Object.defineProperty(exports, "SocketNotificationService", { enumerable: true, get: function () { return services_1.SocketNotificationService; } });
+const config_1 = require("./config");
+Object.defineProperty(exports, "Configuration", { enumerable: true, get: function () { return config_1.Configuration; } });
+const db_management_1 = require("./db-management");
+Object.defineProperty(exports, "CustomersContext", { enumerable: true, get: function () { return db_management_1.CustomersContext; } });
 const hosting_1 = require("./hosting");
-const DEFAULT_PORT_NUMBER = 8080;
-const INVALID_SSL_CERTIFICATE_DETAILS = "Invalid SSL Certificate Env. Details Specified!";
-class MainClass {
-    static main() {
-        try {
-            const portNumber = parseInt(process.env.LISTENER_PORT || "") || DEFAULT_PORT_NUMBER;
-            const enableHttps = (process.env.ENABLE_HTTPS || "") === "true";
-            let host;
-            if (enableHttps) {
-                const certFile = process.env.CERT_FILE;
-                if (!certFile) {
-                    throw new Error(INVALID_SSL_CERTIFICATE_DETAILS);
-                }
-                const keyFile = process.env.KEY_FILE;
-                if (!keyFile) {
-                    throw new Error(INVALID_SSL_CERTIFICATE_DETAILS);
-                }
-                const passphrase = process.env.PASS_PHRASE || "";
-                const certificateDetails = new models_1.CertificateDetails(certFile, keyFile, passphrase);
-                host = new hosting_1.CustomerServiceHost(portNumber, enableHttps, certificateDetails);
-            }
-            else {
-                host = new hosting_1.CustomerServiceHost(portNumber, enableHttps);
-            }
-            host.start()
-                .then(() => common_1.LogManager.info("Customer Service Host Started Successfully!"), () => common_1.LogManager.error("Unable to Start the Customer Service Host!"));
-            const shutdown = () => {
-                host.stop()
-                    .then(() => common_1.LogManager.info("Customer Service Host Stopped Successfully!"), () => common_1.LogManager.error("Unable to Stop the Customer Service Host"));
-            };
-            process.on('exit', shutdown);
-            process.on('SIGINT', shutdown);
-        }
-        catch (error) {
-            common_1.LogManager.error(error);
-        }
-    }
-}
-MainClass.main();
+Object.defineProperty(exports, "CustomerServiceHost", { enumerable: true, get: function () { return hosting_1.CustomerServiceHost; } });
+const routing_1 = require("./routing");
+Object.defineProperty(exports, "AuthenticationRouting", { enumerable: true, get: function () { return routing_1.AuthenticationRouting; } });
+Object.defineProperty(exports, "CustomerRouting", { enumerable: true, get: function () { return routing_1.CustomerRouting; } });
+const utilities_1 = require("./utilities");
+Object.defineProperty(exports, "RandomGenerator", { enumerable: true, get: function () { return utilities_1.RandomGenerator; } });
+Object.defineProperty(exports, "ObjectFormatter", { enumerable: true, get: function () { return utilities_1.ObjectFormatter; } });
+const db_schemas_1 = require("./db-schemas");
+Object.defineProperty(exports, "CustomerSchema", { enumerable: true, get: function () { return db_schemas_1.CustomerSchema; } });
+const models_1 = require("./models");
+Object.defineProperty(exports, "Customer", { enumerable: true, get: function () { return models_1.Customer; } });
+Object.defineProperty(exports, "CertificateDetails", { enumerable: true, get: function () { return models_1.CertificateDetails; } });
 //# sourceMappingURL=index.js.map

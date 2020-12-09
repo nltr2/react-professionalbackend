@@ -1,7 +1,7 @@
-import { Configuration } from "../../config";
-import { ICustomer, LogManager } from "../../common";
+import { Configuration } from "../../../config";
+import { ICustomer, LogManager } from "../../../common";
 import { ICustomerService } from "./icustomer-service";
-import { CustomersContext, Mongoose } from "../../db-management";
+import { CustomersContext, Mongoose } from "../../../db-management";
 
 const INVALID_CONNECTION_STRING = "Invalid Connection String Specified!";
 const INVALID_ARGUMENTS = "Invalid Argument(s) Specified!";

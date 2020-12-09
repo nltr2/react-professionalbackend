@@ -1,9 +1,9 @@
 import express from 'express';
 
-interface ICustomerRouting {
+interface IRouting {
     Router: express.Router
 }
 
 export {
-    ICustomerRouting
+    IRouting
 };

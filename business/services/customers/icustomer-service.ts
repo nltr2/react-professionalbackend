@@ -1,4 +1,4 @@
-import { ICustomer } from "../../common";
+import { ICustomer } from "../../../common";
 
 interface ICustomerService {
     getCustomers(): Promise<ICustomer[] | null>;
